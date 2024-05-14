@@ -1,0 +1,191 @@
+<html>
+  <head>
+    <title>flip with Mo</title>
+    <style>
+
+
+      .container {
+        position:relative;
+        width:400px;
+        height:400px;
+        background-color:gray;
+        margin-left:100px;
+        margin-top:100px;
+      }
+
+      .contact.panel {
+        left:0px;
+        top:100px;
+        position:absolute;
+        -webkit-perspective: 600px;
+        -moz-perspective: 600px;
+        perspective: 600px;
+        border: 1px solid black;
+        width:225px;
+        height:200px;
+      }
+
+      .contact.panel .front {
+          background-color: #ddd;
+          position:absolute;
+
+          width:100%;
+          height:100%;
+
+          -webkit-transform: rotateX(0deg) rotateY(0deg);
+            -moz-transform: rotateX(0deg) rotateY(0deg);
+              transform: rotateX(0deg) rotateY(0deg);
+
+          -webkit-transition: all 0.4s ease-in-out;
+            transition: all 0.4s ease-in-out;
+
+          -webkit-transform-style: preserve-3d;
+            -moz-transform-style: preserve-3d;
+              transform-style: preserve-3d;
+
+          -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+              backface-visibility: hidden;
+
+      }
+
+      .contact.panel.flip .front {
+          -webkit-transform: rotateX(179deg);
+            -moz-transform: rotateX(179deg);
+              transform: rotateX(179deg);
+      }
+
+      .contact.panel .back {
+        background-color: #ddd;
+        position:absolute;
+        -webkit-transform: rotateX(-179deg);
+          -moz-transform:  rotateX(-179deg);
+            transform:  rotateX(-179deg);
+
+        width:100%;
+        height:100%;
+
+        -webkit-transition: all 0.4s ease-in-out;
+          transition: all 0.4s ease-in-out;
+
+        -webkit-transform-style: preserve-3d;
+          -moz-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+
+        -webkit-backface-visibility: hidden;
+          -moz-backface-visibility: hidden;
+            backface-visibility: hidden;
+      }
+
+      .contact.panel.flip .back {
+          -webkit-transform: rotateX(0deg) rotateY(0deg);
+            -moz-transform: rotateX(0deg) rotateY(0deg);
+              transform: rotateX(0deg) rotateY(0deg);
+      }
+
+      .contact.panel:first-child {
+        transform:scale(0.7, 0.7);
+        -ms-transform-origin: center -30%;
+        -webkit-transform-origin: center -30%;
+        transform-origin: center -30%;
+      }
+
+      .contact.panel:nth-child(2) {
+        transform:scale(0.8, 0.8);
+        -ms-transform-origin: center -30%;
+        -webkit-transform-origin: center -30%;
+        transform-origin: center -30%;
+      }
+
+      .contact.panel:nth-child(3) {
+        transform:scale(0.9, 0.9);
+        -ms-transform-origin: center -30%;
+        -webkit-transform-origin: center -30%;
+        transform-origin: center -30%;
+      }
+
+      .contact.panel:last-child {
+        transform:scale(1, 1);
+        -ms-transform-origin: center -20%;
+        -webkit-transform-origin: center -20%;
+        transform-origin: center -20%;
+      }
+
+      .contact.panel .flipBtn {
+        display: none;
+      }
+
+      .contact.panel:last-child .flipBtn {
+        display: block;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+
+    <div class="contact panel">
+      <div class="front" >
+        Front1
+        <button  class="flipBtn" onclick="flipCard()">Flip</button>
+      </div>
+      <div class="back" >
+        Back1
+        <button  class="unflipBtn" onclick="unFlipCard()">Flip</button>
+      </div>
+    </div>
+
+    <div class="contact panel">
+      <div class="front" >
+        Front2
+        <button class="flipBtn" onclick="flipCard()">Flip</button>
+      </div>
+      <div class="back" >
+        Back2
+        <button class="unflipBtn" onclick="unFlipCard()">Flip</button>
+      </div>
+    </div>
+
+    <div class="contact panel">
+      <div class="front" >
+        Front3
+        <button class="flipBtn" onclick="flipCard()">Flip</button>
+      </div>
+      <div class="back" >
+        Back3
+        <button class="unflipBtn" onclick="unFlipCard()">Flip</button>
+      </div>
+    </div>
+
+    <div class="contact panel">
+      <div class="front" >
+        Front4
+        <button class="flipBtn" onclick="flipCard()">Flip</button>
+      </div>
+      <div class="back" >
+        Back4
+        <button class="unflipBtn" onclick="unFlipCard()">Flip</button>
+      </div>
+    </div>
+  </div>
+    <script>
+      function flipCard() {
+        var cards = document.getElementsByClassName('contact');
+        var card = cards[cards.length -1];
+        
+        if (card) {
+          card.className = card.className + ' flip';
+        }
+      }
+
+      function unFlipCard() {
+        var cards = document.getElementsByClassName('contact');
+        var card = cards[cards.length -1];
+
+        if (card) {
+          card.className = card.className.replace(/\b flip\b/,'');
+        }
+      }
+    </script>
+  </body>
+</html>
