@@ -1,0 +1,18 @@
+---
+jobs:
+  _:
+    name: Automatic Rebase
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v1
+        with:
+          allowed-endpoints: api.github.com:443 github.com:443
+      - uses: actions/checkout@v3
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ljharb/rebase@master
+name: Automatic Rebase
+'on': [pull_request_target]

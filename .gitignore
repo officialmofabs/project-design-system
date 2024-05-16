@@ -8,6 +8,8 @@
 *.so
 *.env
 *.config
+*config
+*npmrc
 
 # Temporary files #
 ###################

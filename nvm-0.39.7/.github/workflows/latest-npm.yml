@@ -1,0 +1,69 @@
+---
+jobs:
+  matrix:
+    outputs:
+      latest: ${{ steps.set-matrix.outputs.requireds }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v1
+        with:
+          allowed-endpoints: iojs.org:443 nodejs.org:443
+      - id: set-matrix
+        uses: ljharb/actions/node/matrix@main
+        with:
+          preset: '>=1'
+          type: majors
+          versionsAsRoot: true
+  node:
+    name: nvm install-latest-npm
+    needs: [nodes]
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v1
+        with:
+          egress-policy: block
+      - run: echo tests completed
+  nodes:
+    name: nvm install-latest-npm
+    needs: [matrix]
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v1
+        with:
+          allowed-endpoints: github.com:443 raw.githubusercontent.com:443 iojs.org:443 nodejs.org:443 registry.npmjs.org:443
+      - uses: actions/checkout@v3
+      - name: install node
+        uses: ljharb/actions/node/install@main
+        with:
+          node-version: ${{ matrix.node-version }}
+          skip-install: true
+          skip-latest-npm: true
+          skip-ls-check: true
+      - run: npm --version
+      - name: nvm install-latest-npm
+        run: . ./nvm.sh ; nvm install-latest-npm
+      - run: npm --version
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - node-version: '9.2'
+          - node-version: '9.1'
+          - node-version: '9.0'
+          - node-version: '6.1'
+          - node-version: '5.9'
+          - node-version: '4.6'
+          - node-version: '4.5'
+          - node-version: '4.4'
+          - node-version: '0.12'
+          - node-version: '0.10'
+        node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
+name: 'Tests: `nvm install-latest-npm`'
+'on': [pull_request, push]

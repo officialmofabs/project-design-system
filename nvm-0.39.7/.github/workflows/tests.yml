@@ -1,0 +1,45 @@
+---
+jobs:
+  nvm:
+    name: all test suites, all shells
+    needs: [tests]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo tests completed
+  tests:
+    defaults:
+      run:
+        shell: script -q -e -c "${{ matrix.shell }} {0}"
+    name: tests
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v1
+        with:
+          allowed-endpoints: github.com:443 registry.npmjs.org:443 raw.githubusercontent.com:443 nodejs.org:443 iojs.org:443
+      - uses: actions/checkout@v3
+      - run: sudo ${{ matrix.shell }} --version 2> /dev/null || dpkg -s ${{ matrix.shell }} 2> /dev/null || which ${{ matrix.shell }}
+      - run: curl --version
+      - run: wget --version
+      - name: npm install && version checks
+        uses: ljharb/actions/node/run@main
+        with:
+          node-version: lts/*
+          shell-command: echo installed
+          skip-ls-check: true
+      - run: npm ls urchin
+      - run: env
+      - run: make TERM=xterm-256color TEST_SUITE="${{ matrix.suite }}" SHELL="${{ matrix.shell }}" URCHIN="$(npx which urchin)" test-${{ matrix.shell }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - shell: bash
+            suite: install_script
+name: urchin tests
+'on': [push]      #   shell:
+      #     - bash
+      #   suite:
+      #     - install_script
